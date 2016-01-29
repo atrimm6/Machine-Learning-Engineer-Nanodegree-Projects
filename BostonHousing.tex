@@ -119,7 +119,7 @@ def get_mean_price(city_data):
 \end{verbatim}
 
 \section{Predicting Housing Prices}
-In this section we...
+In this section we... $\clubsuit$ FILL IN SOME INFO ABOUT THE DECISION TREE REGRESSOR
 \subsection{Evaluating Model Performance}
 Since we would like to be able to evaluate our model's ability to predict housing prices given new, unseen data, we begin by splitting the Boston dataset into a training and testing set. By holding out the testing data and allowing our model to learn only on the training set, we leave ourselves an independent set of data we can use to verify that our model can generalize well to unseen data. If we trained on the \emph{entire} dataset, we would have no way to evaluate how well our model can predict the housing price of new data points.
 
@@ -127,7 +127,7 @@ To split the dataset, we first import \texttt{train\_test\_split} from the \text
 \begin{verbatim}
 	from sklearn.cross_validation import train_test_split
 \end{verbatim}
-and define the function 
+and define the function $\clubsuit$ FIX TEXT RUNOFF
 \begin{verbatim}
 	def split_data(city_data):
     # Get the features and labels from the Boston housing data
@@ -135,6 +135,21 @@ and define the function
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
     return X_train, y_train, X_test, y_test
 \end{verbatim}
-Choosing \texttt{test\_size$=$0.30} splits the data into 30 \% testing data and 70 \% training data, while \texttt{random\_state$=$42} is the (pseudo-)random number generator state used for random sampling, which is set arbitrarily to 42.
+Choosing \texttt{test\_size$=$0.30} splits the data into 30 \% testing data and 70 \% training data, while \texttt{random\_state$=$42} is the (pseudo-)random number generator state used for random sampling (which is set arbitrarily to 42).
 
+Next, we will train our model on the training set and compare with its performance on the testing set. To do so, we first need to choose an appropriate performance metric. Looking at the list of regression performance metrics on sklearn, we find four options:
+\begin{verbatim} 	 
+‘mean_absolute_error’ 
+‘mean_squared_error’		 
+‘median_absolute_error’		 
+‘r2’
+\end{verbatim}
+Of these, one could argue that the \texttt{mean\_squared\_error} is the most appropriate performance metric for our algorithm, as the sklearn decision tree regressor already by default uses mean squared error to measure the quality of each split ($\clubsuit $ IS THIS REALLY A GOOD REASON?). Additionally, it has the desired properties that larger deviations from the true labels are penalized more heavily as well as being everywhere differentiable, so that one can compute the maximum and minimum errors using calculus, while none of the other choices share all of these properties. In the following, we will therefore use mean squared error as the performance metric for our model ($\clubsuit$ BE MORE SPECIFIC ABOUT WHAT PERFORMANCE METRIC IS ANALYZING). 
+
+$\clubsuit$ INSERT DESCRIPTION OF LEARNING CURVES AND MODEL COMPLEXITY GRAPH.
+
+($\clubsuit$ THIS PART ON CROSS VALIDATION WITH GRIDSEARCH.) However, we still have a parameter in our model - namely the depth of the decision tree, which we need to optimize. We will do this using grid search over a range of possible values for this parameter. Grid search will run our algorithm over the training and testing data for each of these parameters, and we can compare We first import \texttt{grid\_search} from \texttt{sklearn}:
+\begin{verbatim}
+	from sklearn import grid_search
+\end{verbatim}
 \end{document}
