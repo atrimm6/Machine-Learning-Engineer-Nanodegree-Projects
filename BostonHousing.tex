@@ -78,7 +78,20 @@ which is 13. We can encapsulate these in functions as
     return number_of_features
 \end{verbatim}
 
-To compute the minimum, maximum, mean, and meadian price and the standard deviation, we simply use the methods \texttt{np.min(boston)},\texttt{np.max(boston)}, \texttt{np.mean(boston)}, \texttt{np.meadian(boston)}, and \texttt{np.std(boston)}, respectively. As before, we encapsulate these in functions as
+To compute the minimum, maximum, mean, and meadian price and the standard deviation, we simply use the methods \texttt{np.min(boston.target)},\texttt{np.max(boston.target)}, \texttt{np.mean(boston.target)}, \texttt{np.meadian(boston.target)}, and \texttt{np.std(boston.target)}, respectively. We find
+\begin{verbatim}
+	>>> np.min(boston.target)
+5.0
+>>> np.max(boston.target)
+50.0
+>>> np.mean(boston.target)
+22.532806324110677
+>>> np.median(boston.target)
+21.199999999999999
+>>> np.std(boston.target)
+9.1880115452782025
+\end{verbatim}
+As before, we can encapsulate these in functions as
 \begin{verbatim}
 	def get_min_price(city_data):
     min_price = np.min(city_data.target)
@@ -104,5 +117,24 @@ def get_mean_price(city_data):
     standard_deviation = np.std(city_data.target)
     return standard_deviation
 \end{verbatim}
+
+\section{Predicting Housing Prices}
+In this section we...
+\subsection{Evaluating Model Performance}
+Since we would like to be able to evaluate our model's ability to predict housing prices given new, unseen data, we begin by splitting the Boston dataset into a training and testing set. By holding out the testing data and allowing our model to learn only on the training set, we leave ourselves an independent set of data we can use to verify that our model can generalize well to unseen data. If we trained on the \emph{entire} dataset, we would have no way to evaluate how well our model can predict the housing price of new data points.
+
+To split the dataset, we first import \texttt{train\_test\_split} from the \texttt{sklearn.cross\_validation} module:
+\begin{verbatim}
+	from sklearn.cross_validation import train_test_split
+\end{verbatim}
+and define the function 
+\begin{verbatim}
+	def split_data(city_data):
+    # Get the features and labels from the Boston housing data
+    X, y = city_data.data, city_data.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+    return X_train, y_train, X_test, y_test
+\end{verbatim}
+Choosing \texttt{test\_size$=$0.30} splits the data into 30 \% testing data and 70 \% training data, while \texttt{random\_state$=$42} is the (pseudo-)random number generator state used for random sampling, which is set arbitrarily to 42.
 
 \end{document}
