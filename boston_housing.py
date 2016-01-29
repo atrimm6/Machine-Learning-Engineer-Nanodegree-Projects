@@ -9,7 +9,9 @@ from sklearn.tree import DecisionTreeRegressor
 ################################
 ### ADD EXTRA LIBRARIES HERE ###
 ################################
-
+from sklearn.cross_validation import train_test_split
+from sklearn.metrics import mean_squared_error, make_scorer
+from sklearn import grid_search
 
 def load_data():
     """Load the Boston dataset."""
@@ -31,12 +33,33 @@ def explore_city_data(city_data):
 
     # Please calculate the following values using the Numpy library
     # Size of data (number of houses)?
+def size_of_data(city_data):
+    number_of_houses = np.shape(city_data.data)[0]
+    return number_of_houses
     # Number of features?
+def number_of_features(city_data):
+    number_of_features = np.shape(city_data.data)[1]
+    return number_of_features
     # Minimum price?
+def get_min_price(city_data):
+    min_price = np.min(city_data.target)
+    return min_price
     # Maximum price?
+def get_max_price(city_data):
+    max_price = np.max(city_data.target)
+    return max_price
     # Calculate mean price?
+def get_mean_price(city_data):
+    mean_price = np.mean(city_data.target)
+    return mean_price
     # Calculate median price?
+def get_median_price(city_data):
+    median_price = np.median(city_data.target)
+    return median_price
     # Calculate standard deviation?
+def get_standard_deviation(city_data):
+    standard_deviation = np.std(city_data.target)
+    return standard_deviation
 
 
 def split_data(city_data):
@@ -48,9 +71,8 @@ def split_data(city_data):
     ###################################
     ### Step 2. YOUR CODE GOES HERE ###
     ###################################
-
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
     return X_train, y_train, X_test, y_test
-
 
 def performance_metric(label, prediction):
     """Calculate and return the appropriate error performance metric."""
@@ -61,7 +83,7 @@ def performance_metric(label, prediction):
 
     # The following page has a table of scoring functions in sklearn:
     # http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
-    pass
+    return mean_squared_error(label, prediction)
 
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
@@ -157,27 +179,28 @@ def fit_predict_model(city_data):
     ###################################
     ### Step 4. YOUR CODE GOES HERE ###
     ###################################
-
     # 1. Find an appropriate performance metric. This should be the same as the
     # one used in your performance_metric procedure above:
     # http://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html
-
+    
+    mse_scorer = make_scorer(mean_squared_error, greater_is_better=False)
+    
     # 2. We will use grid search to fine tune the Decision Tree Regressor and
     # obtain the parameters that generate the best training performance. Set up
     # the grid search object here.
     # http://scikit-learn.org/stable/modules/generated/sklearn.grid_search.GridSearchCV.html#sklearn.grid_search.GridSearchCV
-
+    clf = grid_search.GridSearchCV(regressor, parameters, scoring=mse_scorer)
+    clf.fit(city_data.data, city_data.target)
     # Fit the learner to the training data to obtain the best parameter set
     print "Final Model: "
-    print reg.fit(X, y)
-    
+    print clf.best_estimator_
     # Use the model to predict the output of a particular sample
     x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
-    y = reg.predict(x)
+    y = clf.best_estimator_.predict(x)
     print "House: " + str(x)
     print "Prediction: " + str(y)
 
-In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about 
+#In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about 
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
     performanance of a Decision Tree regressor on the housing data.
@@ -188,6 +211,14 @@ def main():
 
     # Explore the data
     explore_city_data(city_data)
+    print "The number of houses is " + str(size_of_data(city_data))
+    print "The number of features is " + str(number_of_features(city_data))
+    print "The minimum price is " + str(get_min_price(city_data))
+    print "The maximum price is " + str(get_max_price(city_data))
+    print "The mean price is " + str(get_mean_price(city_data))
+    print "The mediam price is " + str(get_median_price(city_data))
+    print "The standard deviation is " +str(get_standard_deviation(city_data))
+
 
     # Training/Test dataset split
     X_train, y_train, X_test, y_test = split_data(city_data)
