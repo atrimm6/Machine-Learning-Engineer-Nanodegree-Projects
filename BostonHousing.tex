@@ -1,0 +1,108 @@
+\documentclass[12 pt]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{fullpage}
+\usepackage[mathscr]{euscript}
+\usepackage{youngtab}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{enumerate}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\pf}{\tilde{\phi}_N}
+\newcommand{\g}{\mathfrak{g}}
+\newcommand{\su}{\mathfrak{su}}
+\newcommand{\so}{\mathfrak{so}}
+\newcommand{\usp}{\mathfrak{usp}}
+\newcommand{\h}{\mathfrak{h}}
+\newcommand{\BB}{\mathfrak{B}}
+\newcommand{\mon}{\OO_{\vec{n}}(a)}
+\newcommand{\I}{\mathcal{I}}
+\numberwithin{equation}{section}
+\begin{document}
+
+\title{Boston Housing Prices \\ \footnotesize{Udacity Machine Learning Engineer \\ Nanodegree Program: Project 1}}
+\author{Anderson Daniel Trimm}
+\date{\today}
+\maketitle
+\begin{abstract}
+In this report, we present two analyses using the Boston housing dataset: First, we perform a statistical analysis of the dataset using NumPy. Following this analysis, we optimize a decision tree regression algorithm and use it to predict the value of a house using scikit-learn. 
+\end{abstract}
+\section{Introduction}
+\section{Statistical Analysis of the Boston Housing Dataset}
+In this section we compute basic statistics of the Boston Housing dataset using NumPy. To begin, we need to import the Boston Housing dataset as well as Numpy:
+
+\begin{verbatim}
+	import numpy as np
+	from sklearn import datasets
+\end{verbatim}
+
+We can now define the following function to load the Boston dataset:
+
+\begin{verbatim}
+	def load_data():
+    """Load the Boston dataset."""
+
+    boston = datasets.load_boston()
+    return boston
+\end{verbatim}
+After loading the Boston dataset, we can look at its attributes \texttt{boston.data} and \texttt{boston.target} to access the features and housing prices. The attribute \texttt{boston.data} gives a two-dimensional ndarray, where each row is the list of features for a given house. The attribute \texttt{boston.target} gives a one-dimensional ndarray of the housing prices. The total number of houses is therefore just the length of the ndarray boston.target:
+
+\begin{verbatim}
+	>>> np.shape(boston.target)
+(506,)
+\end{verbatim}
+which we see is 506. The number of features per house then is the row length of the ndarray boston.data, which is the one-eth entry of
+\begin{verbatim}
+	>>> np.shape(boston.data)
+(506, 13)
+\end{verbatim}
+which is 13. We can encapsulate these in functions as 
+\begin{verbatim}
+		def size_of_data(city_data):
+    number_of_houses = np.shape(city_data.data)[0]
+    return number_of_houses
+\end{verbatim}
+\begin{verbatim}
+	def number_of_features(city_data):
+    number_of_features = np.shape(city_data.data)[1]
+    return number_of_features
+\end{verbatim}
+
+To compute the minimum, maximum, mean, and meadian price and the standard deviation, we simply use the methods \texttt{np.min(boston)},\texttt{np.max(boston)}, \texttt{np.mean(boston)}, \texttt{np.meadian(boston)}, and \texttt{np.std(boston)}, respectively. As before, we encapsulate these in functions as
+\begin{verbatim}
+	def get_min_price(city_data):
+    min_price = np.min(city_data.target)
+    return min_price
+\end{verbatim}
+\begin{verbatim}
+	def get_max_price(city_data):
+    max_price = np.max(city_data.target)
+    return max_price
+\end{verbatim}
+\begin{verbatim}
+def get_mean_price(city_data):
+    mean_price = np.mean(city_data.target)
+    return mean_price
+\end{verbatim}
+\begin{verbatim}
+	def get_median_price(city_data):
+    median_price = np.median(city_data.target)
+    return median_price
+\end{verbatim}
+\begin{verbatim}
+	def get_standard_deviation(city_data):
+    standard_deviation = np.std(city_data.target)
+    return standard_deviation
+\end{verbatim}
+
+\end{document}
