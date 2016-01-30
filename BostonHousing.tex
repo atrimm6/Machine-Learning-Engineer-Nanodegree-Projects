@@ -148,8 +148,142 @@ Of these, one could argue that the \texttt{mean\_squared\_error} is the most app
 
 $\clubsuit$ INSERT DESCRIPTION OF LEARNING CURVES AND MODEL COMPLEXITY GRAPH.
 
-($\clubsuit$ THIS PART ON CROSS VALIDATION WITH GRIDSEARCH.) However, we still have a parameter in our model - namely the depth of the decision tree, which we need to optimize. We will do this using grid search over a range of possible values for this parameter. Grid search will run our algorithm over the training and testing data for each of these parameters, and we can compare We first import \texttt{grid\_search} from \texttt{sklearn}:
+ However, we still have a parameter in our model - namely the depth of the decision tree, which we need to optimize. Depending on the value of the parameter, the model may perform better or worse. If we set the parameter too low, the model will suffer from high bias. If it is too high, the model will have high variance. We should therefore cross-validate our model by testing different values of our parameter and comparing the results. We will do this using \texttt{GridSearch} over a range of possible values for this parameter. In general, \texttt{GridSearch} systematically tries all combinations of parameters, cross-validating as it goes to determine which parameter combination gives the best model performance.
+
+We implement \texttt{GridSearch} with the following function ($\clubsuit$ FIX TEXT RUNOFF)
 \begin{verbatim}
 	from sklearn import grid_search
+	from sklearn.metrics import mean_squared_error, make_scorer
+	from sklearn.tree import DecisionTreeRegressor
 \end{verbatim}
+\begin{verbatim}
+	def fit_predict_model(city_data):
+    """Find and tune the optimal model. Make a prediction on housing data."""
+
+    # Get the features and labels from the Boston housing data
+    X, y = city_data.data, city_data.target
+
+    # Setup a Decision Tree Regressor
+    regressor = DecisionTreeRegressor()
+	
+	# Parameter set for GridSearch to test 
+    parameters = {'max_depth':(1,2,3,4,5,6,7,8,9,10)}
+    
+    # Score models by mean squared error
+    mse_scorer = make_scorer(mean_squared_error, greater_is_better=False)
+    
+    # Implement GridSearch
+    clf = grid_search.GridSearchCV(regressor, parameters, scoring=mse_scorer)
+    
+    # Fit the learner to the training data to obtain the best parameter set
+   
+    clf.fit(city_data.data, city_data.target)
+    
+    # Print the result from GridSearch
+    print "Final Model: "
+    print clf.best_estimator_
+    
+    # Use the model to predict the output of a particular sample
+    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+    y = clf.best_estimator_.predict(x)
+    print "House: " + str(x)
+    print "Prediction: " + str(y)
+\end{verbatim}
+
+\subsection{Analyzing Model Performance}
+We can analyze our model's performance visually by plotting a \emph{learning curve}, which plots the error of the training and testing data over the number of training instances. Setting our performance metric as the mean squared error
+
+\begin{verbatim}
+	def performance_metric(label, prediction):
+    """Calculate and return the appropriate error performance metric."""
+    return mean_squared_error(label, prediction)
+\end{verbatim}
+
+we plot the learning curve for each max depth with the following code:
+
+\begin{verbatim}
+	def learning_curve(depth, X_train, y_train, X_test, y_test):
+    """Calculate the performance of the model after a set of training data."""
+
+    # We will vary the training set size so that we have 50 different sizes
+    sizes = np.round(np.linspace(1, len(X_train), 50))
+    train_err = np.zeros(len(sizes))
+    test_err = np.zeros(len(sizes))
+
+    print "Decision Tree with Max Depth: "
+    print depth
+
+    for i, s in enumerate(sizes):
+
+        # Create and fit the decision tree regressor model
+        regressor = DecisionTreeRegressor(max_depth=depth)
+        regressor.fit(X_train[:s], y_train[:s])
+
+        # Find the performance on the training and testing set
+        train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
+        test_err[i] = performance_metric(y_test, regressor.predict(X_test))
+
+
+    # Plot learning curve graph
+    learning_curve_graph(sizes, train_err, test_err)
+
+
+def learning_curve_graph(sizes, train_err, test_err):
+    """Plot training and test error as a function of the training size."""
+
+    pl.figure()
+    pl.title('Decision Trees: Performance vs Training Size')
+    pl.plot(sizes, test_err, lw=2, label = 'test error')
+    pl.plot(sizes, train_err, lw=2, label = 'training error')
+    pl.legend()
+    pl.xlabel('Training Size')
+    pl.ylabel('Error')
+    pl.show()
+\end{verbatim}
+Looking at the resulting learning curves for our example, we see that the training and testing error initially converge at a high value. As we increase the complexity of the model, the training and testing error start to converge at lower values. However, as we keep increasing the complexity, the testing error stays roughly the same (or even becomes slightly worse) while the training error continues to decrease. This is the sign of overfitting. Comparing the first and last learning curves (the learning curves for the decision tree regressor with max depth 1 and 10, respectively) we see that, when fully trained, the first model suffers from high bias (the error is high as the model is not complex enough to accurately model the data) while the last model suffers from high variance (it is too complex - by overfitting the training data, it is not predictive of the testing data). 
+
+We can visualize this by plotting a \emph{model complexity graph}, which plots the training and testing error of each fully trained model against the max depth of the decision tree regressor. This is implemented by the following code:
+
+\begin{verbatim}
+	def model_complexity(X_train, y_train, X_test, y_test):
+    """Calculate the performance of the model as model complexity increases."""
+
+    print "Model Complexity: "
+
+    # We will vary the depth of decision trees from 2 to 25
+    max_depth = np.arange(1, 25)
+    train_err = np.zeros(len(max_depth))
+    test_err = np.zeros(len(max_depth))
+
+    for i, d in enumerate(max_depth):
+        # Setup a Decision Tree Regressor so that it learns a tree with depth d
+        regressor = DecisionTreeRegressor(max_depth=d)
+
+        # Fit the learner to the training data
+        regressor.fit(X_train, y_train)
+
+        # Find the performance on the training set
+        train_err[i] = performance_metric(y_train, regressor.predict(X_train))
+
+        # Find the performance on the testing set
+        test_err[i] = performance_metric(y_test, regressor.predict(X_test))
+
+    # Plot the model complexity graph
+    model_complexity_graph(max_depth, train_err, test_err)
+
+
+def model_complexity_graph(max_depth, train_err, test_err):
+    """Plot training and test error as a function of the depth of the decision tree learn."""
+
+    pl.figure()
+    pl.title('Decision Trees: Performance vs Max Depth')
+    pl.plot(max_depth, test_err, lw=2, label = 'test error')
+    pl.plot(max_depth, train_err, lw=2, label = 'training error')
+    pl.legend()
+    pl.xlabel('Max Depth')
+    pl.ylabel('Error')
+    pl.show()
+\end{verbatim}
+
+Looking at the graph, we see confirm that training and testing errors initially decrease together as we increase model complexity, until the testing error levels off and the training error continues to decrease. The region where these two errors diverge is the overfitting region, so we can read off from the graph that a max depth of approximately 4 best generalizes the dataset.
 \end{document}
