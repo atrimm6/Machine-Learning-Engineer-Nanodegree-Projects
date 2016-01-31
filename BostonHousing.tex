@@ -36,7 +36,7 @@
 \date{\today}
 \maketitle
 \begin{abstract}
-In this report, we present two analyses using the Boston housing dataset: First, we perform a statistical analysis of the dataset using NumPy. Following this analysis, we optimize a decision tree regression algorithm and use it to predict the value of a house using scikit-learn. 
+In this report, we explore the Boston Housing dataset and train a decision tree regressor to predict housing prices.
 \end{abstract}
 \section{Introduction}
 In this project, we use machine learning to make a predictive model of Boston housing prices in the 1970s using the Boston housing price data set. This is a (supervised) regression learning problem, and we model our data using scikit-learn's decision tree regressor. After exploring the data in section \ref{stats} by making a statistical analysis using NumPy, in section \ref{predict} we train our model, evaluate its performance on the training and testing data, and finally use it to predict the price of a new house. In section \ref{conclusions}, we discuss our conclusions.
@@ -80,7 +80,7 @@ which is 13. We can encapsulate these in functions as
     return number_of_features
 \end{verbatim}
 
-To compute the minimum, maximum, mean, and meadian price and the standard deviation, we simply use the methods \texttt{np.min(boston.target)},\texttt{np.max(boston.target)}, \texttt{np.mean(boston.target)}, \texttt{np.meadian(boston.target)}, and \texttt{np.std(boston.target)}, respectively. We find
+To compute the minimum, maximum, mean, and meadian price, as well as the standard deviation, we simply use the methods \texttt{np.min(boston.target)},\texttt{np.max(boston.target)}, \texttt{np.mean(boston.target)}, \texttt{np.meadian(boston.target)}, and \texttt{np.std(boston.target)}, respectively. We find
 \begin{verbatim}
 	>>> np.min(boston.target)
 5.0
@@ -140,7 +140,7 @@ and define the function
 \end{verbatim}
 Choosing \texttt{test\_size$=$0.30} splits the data into 30 \% testing data and 70 \% training data, while \texttt{random\_state$=$42} is the (pseudo-)random number generator state used for random sampling (which is set arbitrarily to 42).
 
-Next, we will train our model on the training set and compare with its performance on the testing set. To do so, we first need to choose an appropriate performance metric. Looking at the list of regression performance metrics on sklearn, we find four options:
+Next, we will train our model on the training set and compare its performance with its performance on the testing set. To do so, we first need to choose an appropriate performance metric. Looking at the list of regression performance metrics on sklearn, we find four options:
 \begin{verbatim} 	 
 ‘mean_absolute_error’ 
 ‘mean_squared_error’		 
@@ -149,7 +149,7 @@ Next, we will train our model on the training set and compare with its performan
 \end{verbatim}
 Of these, one could argue that the \texttt{mean\_squared\_error} is the most appropriate performance metric for our algorithm, as the sklearn decision tree regressor already by default uses mean squared error to measure the quality of each split. Additionally, the mean squared error has the desired properties that larger deviations from the true labels are penalized more heavily, as well as being everywhere differentiable so that one can compute the maximum and minimum errors using calculus. None of the other choices share all of these properties. In the following, we will therefore use mean squared error as the performance metric for our model.
 
- However, we still have a parameter in our model - namely the depth of the decision tree, which we need to optimize. Depending on the value of the parameter, the model may perform better or worse. If we set the parameter too low, the model will suffer from high bias. If it is too high, the model will have high variance. We should therefore cross-validate our model by testing different values of our parameter and comparing the results. We will do this using \texttt{GridSearch} over a range of possible values for this parameter. In general, \texttt{GridSearch} systematically tries all combinations of parameters, cross-validating as it goes to determine which parameter combination gives the best model performance.
+ However, we still have a free parameter in our model - namely, the depth of the decision tree, which we need to optimize. Depending on the value of the parameter, the model may perform better or worse. If we set the parameter too low, the model will suffer from high bias. If it is too high, the model will have high variance. We should therefore cross-validate our model by testing different values of our parameter and comparing the results. We will do this using \texttt{GridSearch} over a range of possible values for this parameter. In general, \texttt{GridSearch} systematically tries all combinations of parameters, cross-validating as it goes to determine which parameter combination gives the best model performance.
 
 We implement \texttt{GridSearch} with the following function 
 \begin{verbatim}
@@ -193,7 +193,7 @@ We implement \texttt{GridSearch} with the following function
 \end{verbatim}
 
 \subsection{Analyzing Model Performance}
-We can analyze our model's performance visually by plotting a \emph{learning curve}, which plots the error of the training and testing data over the number of training instances. Setting our performance metric as the mean squared error
+We can analyze our model's performance visually by plotting a \emph{learning curve}, which plots the error of the training and testing data over the number of training instances. Setting our performance metric as the mean squared error:
 
 \begin{verbatim}
 	def performance_metric(label, prediction):
@@ -246,22 +246,24 @@ Looking at the resulting learning curves for our example, we see that the traini
 
 \begin{figure}[h]
 \begin{center}
-		\includegraphics[scale=0.5]{figure_1}
+		\includegraphics[scale=0.4]{figure_1}
 		\caption{Learning curve for max\_depth $= 1$.}
 \end{center}
 \end{figure}
 
 
-
+\newpage
 
 As we increase the complexity of the model, the training and testing error start to converge at lower values. However, as we keep increasing the complexity, the testing error stays roughly the same (or even becomes slightly worse) while the training error continues to decrease. This is the sign of overfitting. Comparing the first and last learning curves (the learning curves for the decision tree regressor with max depth 1 and 10, respectively) we see that, when fully trained, the first model suffers from high bias (the error is high as the model is not complex enough to accurately model the data) while the last model suffers from high variance (it is too complex - by overfitting the training data, it is not predictive of the testing data). 
 
 \begin{figure}[h]
 \begin{center}
-		\includegraphics[scale=0.5]{figure_10}
+		\includegraphics[scale=0.4]{figure_10}
 		\caption{Learning curve for max\_depth $= 10$.}
 \end{center}
 \end{figure}
+
+\newpage
 
 We can visualize this by plotting a \emph{model complexity graph}, which plots the training and testing error of each fully trained model against the max depth of the decision tree regressor. This is implemented by the following code:
 
@@ -308,7 +310,7 @@ def model_complexity_graph(max_depth, train_err, test_err):
 
 \begin{figure}[t]
 \begin{center}
-		\includegraphics[scale=0.5]{model_complexity}
+		\includegraphics[scale=0.4]{model_complexity}
 		\caption{Model complexity graph.}
 \end{center}
 \end{figure}
