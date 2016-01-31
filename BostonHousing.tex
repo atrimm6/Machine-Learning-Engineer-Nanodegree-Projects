@@ -240,7 +240,26 @@ def learning_curve_graph(sizes, train_err, test_err):
     pl.ylabel('Error')
     pl.show()
 \end{verbatim}
-Looking at the resulting learning curves for our example, we see that the training and testing error initially converge at a high value. As we increase the complexity of the model, the training and testing error start to converge at lower values. However, as we keep increasing the complexity, the testing error stays roughly the same (or even becomes slightly worse) while the training error continues to decrease. This is the sign of overfitting. Comparing the first and last learning curves (the learning curves for the decision tree regressor with max depth 1 and 10, respectively) we see that, when fully trained, the first model suffers from high bias (the error is high as the model is not complex enough to accurately model the data) while the last model suffers from high variance (it is too complex - by overfitting the training data, it is not predictive of the testing data). 
+Looking at the resulting learning curves for our example, we see that the training and testing error initially converge at a high value. 
+
+\begin{figure}[h]
+\begin{center}
+		\includegraphics[scale=0.5]{figure_1}
+		\caption{Learning curve for max\_depth $= 1$.}
+\end{center}
+\end{figure}
+
+
+
+
+As we increase the complexity of the model, the training and testing error start to converge at lower values. However, as we keep increasing the complexity, the testing error stays roughly the same (or even becomes slightly worse) while the training error continues to decrease. This is the sign of overfitting. Comparing the first and last learning curves (the learning curves for the decision tree regressor with max depth 1 and 10, respectively) we see that, when fully trained, the first model suffers from high bias (the error is high as the model is not complex enough to accurately model the data) while the last model suffers from high variance (it is too complex - by overfitting the training data, it is not predictive of the testing data). 
+
+\begin{figure}[h]
+\begin{center}
+		\includegraphics[scale=0.5]{figure_10}
+		\caption{Learning curve for max\_depth $= 10$.}
+\end{center}
+\end{figure}
 
 We can visualize this by plotting a \emph{model complexity graph}, which plots the training and testing error of each fully trained model against the max depth of the decision tree regressor. This is implemented by the following code:
 
@@ -285,10 +304,20 @@ def model_complexity_graph(max_depth, train_err, test_err):
     pl.show()
 \end{verbatim}
 
+\begin{figure}[t]
+\begin{center}
+		\includegraphics[scale=0.5]{model_complexity}
+		\caption{Model complexity graph.}
+\end{center}
+\end{figure}
+
 Looking at the graph, we see confirm that training and testing errors initially decrease together as we increase model complexity, until the testing error levels off and the training error continues to decrease. The region where these two errors diverge is the overfitting region, so we can read off from the graph that a max depth of 4 best generalizes the dataset.
+
+\newpage
 
 \subsection{Model Prediction}
 After implementing \texttt{GridSearch} as above, we print \texttt{clf.best\_estimator\_} to see the best model. Due to the small randomization in the code, we run the program several times to identify the most common price and reasonable model complexity. As we determined visually above, the best model is given by 
+
 \begin{verbatim}
 	>>> clf.best_estimator_
 DecisionTreeRegressor(criterion='mse', max_depth=4, max_features=None,
