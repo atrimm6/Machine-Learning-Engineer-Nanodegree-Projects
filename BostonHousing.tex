@@ -10,6 +10,7 @@
 \usepackage{color}
 \usepackage{multirow}
 \usepackage{enumerate}
+\usepackage{listings}
 \newcommand{\W}{\mathcal{W}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\R}{\mathbb{R}}
@@ -38,7 +39,8 @@
 In this report, we present two analyses using the Boston housing dataset: First, we perform a statistical analysis of the dataset using NumPy. Following this analysis, we optimize a decision tree regression algorithm and use it to predict the value of a house using scikit-learn. 
 \end{abstract}
 \section{Introduction}
-\section{Statistical Analysis of the Boston Housing Dataset}
+In this project, we use machine learning to make a predictive model of Boston housing prices in the 1970s using the Boston housing price data set. This is a (supervised) regression learning problem, and we model our data using scikit-learn's decision tree regressor. After exploring the data in section \ref{stats} by making a statistical analysis using NumPy, in section \ref{predict} we train our model, evaluate its performance on the training and testing data, and finally use it to predict the price of a new house. In section \ref{conclusions}, we discuss our conclusions.
+\section{Statistical Analysis of the Boston Housing Dataset}\label{stats}
 In this section we compute basic statistics of the Boston Housing dataset using NumPy. To begin, we need to import the Boston Housing dataset as well as Numpy:
 
 \begin{verbatim}
@@ -118,8 +120,8 @@ def get_mean_price(city_data):
     return standard_deviation
 \end{verbatim}
 
-\section{Predicting Housing Prices}
-In this section we... $\clubsuit$ FILL IN SOME INFO ABOUT THE DECISION TREE REGRESSOR
+\section{Predicting Housing Prices}\label{predict}
+In this section we will model the dataset using a decision tree regressor. After discussing our choice of performance metric, we train and cross-validate our model by performing a grid  search over possible max depths of our decision tree. We visualize our model's performance by plotting the learning curve for each max depth, and combine these into a model complexity graph. After determining the  optimal max depth for our decision tree, we use our model to predict the price of a new house, and compare with the statistics computed in section \ref{stats}.
 \subsection{Evaluating Model Performance}
 Since we would like to be able to evaluate our model's ability to predict housing prices given new, unseen data, we begin by splitting the Boston dataset into a training and testing set. By holding out the testing data and allowing our model to learn only on the training set, we leave ourselves an independent set of data we can use to verify that our model can generalize well to unseen data. If we trained on the \emph{entire} dataset, we would have no way to evaluate how well our model can predict the housing price of new data points.
 
@@ -127,12 +129,13 @@ To split the dataset, we first import \texttt{train\_test\_split} from the \text
 \begin{verbatim}
 	from sklearn.cross_validation import train_test_split
 \end{verbatim}
-and define the function $\clubsuit$ FIX TEXT RUNOFF
+and define the function 
 \begin{verbatim}
 	def split_data(city_data):
     # Get the features and labels from the Boston housing data
     X, y = city_data.data, city_data.target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30,
+    ... random_state=42)
     return X_train, y_train, X_test, y_test
 \end{verbatim}
 Choosing \texttt{test\_size$=$0.30} splits the data into 30 \% testing data and 70 \% training data, while \texttt{random\_state$=$42} is the (pseudo-)random number generator state used for random sampling (which is set arbitrarily to 42).
@@ -144,13 +147,11 @@ Next, we will train our model on the training set and compare with its performan
 ‘median_absolute_error’		 
 ‘r2’
 \end{verbatim}
-Of these, one could argue that the \texttt{mean\_squared\_error} is the most appropriate performance metric for our algorithm, as the sklearn decision tree regressor already by default uses mean squared error to measure the quality of each split ($\clubsuit $ IS THIS REALLY A GOOD REASON?). Additionally, it has the desired properties that larger deviations from the true labels are penalized more heavily as well as being everywhere differentiable, so that one can compute the maximum and minimum errors using calculus, while none of the other choices share all of these properties. In the following, we will therefore use mean squared error as the performance metric for our model ($\clubsuit$ BE MORE SPECIFIC ABOUT WHAT PERFORMANCE METRIC IS ANALYZING). 
-
-$\clubsuit$ INSERT DESCRIPTION OF LEARNING CURVES AND MODEL COMPLEXITY GRAPH.
+Of these, one could argue that the \texttt{mean\_squared\_error} is the most appropriate performance metric for our algorithm, as the sklearn decision tree regressor already by default uses mean squared error to measure the quality of each split. Additionally, the mean squared error has the desired properties that larger deviations from the true labels are penalized more heavily, as well as being everywhere differentiable so that one can compute the maximum and minimum errors using calculus. None of the other choices share all of these properties. In the following, we will therefore use mean squared error as the performance metric for our model.
 
  However, we still have a parameter in our model - namely the depth of the decision tree, which we need to optimize. Depending on the value of the parameter, the model may perform better or worse. If we set the parameter too low, the model will suffer from high bias. If it is too high, the model will have high variance. We should therefore cross-validate our model by testing different values of our parameter and comparing the results. We will do this using \texttt{GridSearch} over a range of possible values for this parameter. In general, \texttt{GridSearch} systematically tries all combinations of parameters, cross-validating as it goes to determine which parameter combination gives the best model performance.
 
-We implement \texttt{GridSearch} with the following function ($\clubsuit$ FIX TEXT RUNOFF)
+We implement \texttt{GridSearch} with the following function 
 \begin{verbatim}
 	from sklearn import grid_search
 	from sklearn.metrics import mean_squared_error, make_scorer
@@ -184,7 +185,8 @@ We implement \texttt{GridSearch} with the following function ($\clubsuit$ FIX TE
     print clf.best_estimator_
     
     # Use the model to predict the output of a particular sample
-    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 
+    ... 20.20, 332.09, 12.13]
     y = clf.best_estimator_.predict(x)
     print "House: " + str(x)
     print "Prediction: " + str(y)
@@ -325,16 +327,19 @@ DecisionTreeRegressor(criterion='mse', max_depth=4, max_features=None,
            min_weight_fraction_leaf=0.0, presort=False, random_state=None,
            splitter='best')
 \end{verbatim}
-For our example house, the price predicted by this model is ($\clubsuit$ FIX TEXT RUNOFF)
+For our example house, the price predicted by this model is 
 \begin{verbatim}
-	>>> x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]	
+	>>> x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0,
+	    ... 20.20, 332.09, 12.13]	
 >>> y = clf.best_estimator_.predict(x)
 >>> print "Prediction: " + str(y)
 Prediction: [ 21.62974359]
     
 \end{verbatim}
-Comparing with the statistics computed in section 1, this price is well within one standard deviation of the mean and slightly above the median price.
+Comparing with the statistics computed in section \ref{stats}, this price is well within one standard deviation of the mean and slightly above the median price.
 
-\section{Conclusions}
+\section{Conclusions}\label{conclusions}
+In this project, we have used a decision tree regressor to model the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4, and we then used this model to predict the price of a new house. By comparing our prediction with the statistics computed from the dataset, we find that our prediction is reasonable. 
 
+Due to the small randomization in the code that splits our data into a training and testing set, we needed to run our program several times to find the most common optimal model and predicted price. This difficulty might be overcome by additionally running a k-fold cross validation for each maximum depth. However, this would come at the cost of significantly more computation time, and for the purposes of this project, the method employed in this paper produces a satisfactory answer.
 \end{document}
