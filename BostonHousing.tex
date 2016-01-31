@@ -315,12 +315,12 @@ def model_complexity_graph(max_depth, train_err, test_err):
 \end{center}
 \end{figure}
 
-Looking at the graph, we see confirm that training and testing errors initially decrease together as we increase model complexity, until the testing error levels off and the training error continues to decrease. The region where these two errors diverge is the overfitting region, so we can read off from the graph that a max depth of 4 best generalizes the dataset.
+Looking at the graph, we can confirm that training and testing errors initially decrease together as we increase model complexity, until the testing error levels off (although fluctuating) and the training error continues to decrease. The region where these two errors diverge is the overfitting region, so we can read off from the graph that a max depth of 4 best generalizes the dataset.
 
 \newpage
 
 \subsection{Model Prediction}
-After implementing \texttt{GridSearch} as above, we print \texttt{clf.best\_estimator\_} to see the best model. Due to the small randomization in the code, we run the program several times to identify the most common price and reasonable model complexity. As we determined visually above, the best model is given by 
+After implementing \texttt{GridSearch} as above, we print \texttt{clf.best\_estimator\_} to see the best model. Due to the small randomization in the code where we split the dataset into training and testing sets, we run the program several times to identify the most common optimal model complexity, which leads to the most reasonable price. As we determined visually above, the best model is given by 
 
 \begin{verbatim}
 	>>> clf.best_estimator_
@@ -338,10 +338,10 @@ For our example house, the price predicted by this model is
 Prediction: [ 21.62974359]
     
 \end{verbatim}
-Comparing with the statistics computed in section \ref{stats}, this price is well within one standard deviation of the mean and slightly above the median price.
+Comparing with the statistics computed in section \ref{stats}, this price is well within one standard deviation of the mean, and very close to the median price.
 
 \section{Conclusions}\label{conclusions}
-In this project, we have used a decision tree regressor to model the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4, and we then used this model to predict the price of a new house. By comparing our prediction with the statistics computed from the dataset, we find that our prediction is reasonable. 
+In this project, we have used a decision tree regressor to model housing prices using the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4. We then used this model to predict the price of a new house, which is not included in the dataset. By comparing our prediction with the statistics computed from the dataset, we find that our prediction is reasonable. 
 
 Due to the small randomization in the code that splits our data into a training and testing set, we needed to run our program several times to find the most common optimal model and predicted price. This might be improved by increasing the number of foldings from the default 3-fold cross validation used by grid search. However, this would come at the cost of longer computation time, and for the purposes of this project the method employed here produces a satisfactory answer.
 \end{document}
