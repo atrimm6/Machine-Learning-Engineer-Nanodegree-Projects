@@ -5,6 +5,7 @@ import numpy as np
 import pylab as pl
 from sklearn import datasets
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.neighbors import NearestNeighbors
 
 ################################
 ### ADD EXTRA LIBRARIES HERE ###
@@ -200,6 +201,21 @@ def fit_predict_model(city_data):
     print "House: " + str(x)
     print "Prediction: " + str(y)
 
+# Check if prediction is reasonable by comparing with the average price of its nearest neightbors
+def find_nearest_neighbor_indexes(x, city_data):
+   neigh = NearestNeighbors(n_neighbors = 10)
+   neigh.fit(city_data.data)
+   distance, indexes = neigh.kneighbors(x)
+   return indexes
+
+def nearest_neighbor_average(x,city_data):
+    indexes = find_nearest_neighbor_indexes(x, city_data)
+    sum_prices = []
+    for i in indexes:
+        sum_prices.append(city_data.target[i])
+    neighbor_avg = np.mean(sum_prices)
+    print "Nearest Neighbors average: " +str(neighbor_avg)
+
 #In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about 
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
@@ -233,6 +249,11 @@ def main():
 
     # Tune and predict Model
     fit_predict_model(city_data)
+
+    # Check if answer is reasonable
+    x = [11.95, 0.00, 18.100, 0, 0.6590, 5.6090, 90.00, 1.385, 24, 680.0, 20.20, 332.09, 12.13]
+    find_nearest_neighbor_indexes(x, city_data)
+    nearest_neighbor_average(x,city_data)
 
 
 if __name__ == "__main__":
