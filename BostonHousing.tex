@@ -342,10 +342,27 @@ Prediction: [ 21.62974359]
 \end{verbatim}
 Comparing with the statistics computed in section \ref{stats}, this price is well within one standard deviation of the mean, and very close to the median price.
 
+As a better check of this prediction, we can use sklearn to compare our prediction with the average price of our house's 10 nearest neighbors. This is implemented by \footnote{We thank the anonymous reviewer for suggesting this method and for outlining the code.}
 
+\begin{verbatim}
+	def find_nearest_neighbor_indexes(x, city_data):
+   neigh = NearestNeighbors(n_neighbors = 10)
+   neigh.fit(city_data.data)
+   distance, indexes = neigh.kneighbors(x)
+   return indexes
+
+def nearest_neighbor_average(x,city_data):
+    indexes = find_nearest_neighbor_indexes(x, city_data)
+    sum_prices = []
+    for i in indexes:
+        sum_prices.append(city_data.target[i])
+    neighbor_avg = np.mean(sum_prices)
+    print "Nearest Neighbors average: " +str(neighbor_avg)
+\end{verbatim}
+We find the average price of the 10 nearest neighbors to be 21.52, which is in excellent agreement with our prediction.
 
 \section{Conclusions}\label{conclusions}
-In this project, we have used a decision tree regressor to model housing prices using the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4. We then used this model to predict the price of a new house, which is not included in the dataset. By comparing our prediction with the statistics computed from the dataset, we find that our prediction is reasonable.
+In this project, we have used a decision tree regressor to model housing prices using the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4. We then used this model to predict the price of a new house, which is not included in the dataset. By comparing our prediction with the statistics computed from the dataset, as well as the average price of our house's 10 nearest neighbors in the dataset, we find that our prediction is reasonable.
 
 Due to the small randomization in the code that splits our data into a training and testing set, we needed to run our program several times to find the most common optimal model and predicted price. This might be improved by increasing the number of foldings from the default 3-fold cross validation used by grid search. However, this would come at the cost of longer computation time, and for the purposes of this project the method employed here produces a satisfactory answer.
 \end{document}
