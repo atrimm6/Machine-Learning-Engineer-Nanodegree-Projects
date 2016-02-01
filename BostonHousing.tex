@@ -341,7 +341,7 @@ Prediction: [ 21.62974359]
 Comparing with the statistics computed in section \ref{stats}, this price is well within one standard deviation of the mean, and very close to the median price.
 
 \section{Conclusions}\label{conclusions}
-In this project, we have used a decision tree regressor to model housing prices using the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4. We then used this model to predict the price of a new house, which is not included in the dataset. By comparing our prediction with the statistics computed from the dataset, we find that our prediction is reasonable. 
+In this project, we have used a decision tree regressor to model housing prices using the Boston housing dataset. By implementing a grid search over maximum tree depths, we found that the optimal model has a maximum depth of 4. We then used this model to predict the price of a new house. By comparing our prediction with the statistics computed from the dataset, we find that our prediction is reasonable. 
 
 Due to the small randomization in the code that splits our data into a training and testing set, we needed to run our program several times to find the most common optimal model and predicted price. This might be improved by increasing the number of foldings from the default 3-fold cross validation used by grid search. However, this would come at the cost of longer computation time, and for the purposes of this project the method employed here produces a satisfactory answer.
 \end{document}
