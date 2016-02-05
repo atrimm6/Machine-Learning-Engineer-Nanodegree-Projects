@@ -65,16 +65,16 @@ Cons:
 	\item Uses a lot of CPU memory, since it has to store the dataset (as opposed to a parametric model, which throws away the dataset after learning the parameters)
 \end{itemize}
 
-Despite the memory cost, since our dataset is not too large, kNN is a reasonable classifier to try.
+Despite the memory cost, since our dataset is not too large, kNN is a reasonable classifier to try. The results for our model with the default parameter settings are recorded in the table below.
 
 \begin{center}
   \begin{tabular}{| c | c | c | c | }
     \hline
     & 100 & 200 & 300 \\ \hline
-    Training time (sec) & & & \\ \hline
-    Prediction time (sec) & & & \\ \hline 
-    F1 score for training set & & & \\ \hline
-    F1 score for test set & & & \\ \hline
+    Training time (sec) & 0.001 & 0.001 & 0.001 \\ \hline
+    Prediction time (sec) & 0.001 & 0.002 & 0.003 \\ \hline 
+    F1 score for training set & 0.88  & 0.88 & 0.88 \\ \hline
+    F1 score for test set & 0.78 & 0.77 & 0.78 \\ \hline
   \end{tabular}
 \end{center}
 
@@ -96,10 +96,10 @@ Cons:
   \begin{tabular}{| c | c | c | c | }
     \hline
     & 100 & 200 & 300 \\ \hline
-    Training time (sec) & & & \\ \hline
-    Prediction time (sec) & & & \\ \hline 
-    F1 score for training set & & & \\ \hline
-    F1 score for test set & & & \\ \hline
+    Training time (sec) & 0.001 & 0.001 & 0.001 \\ \hline
+    Prediction time (sec) & 0.001 & 0.000 & 0.000 \\ \hline 
+    F1 score for training set & 0.33 & 0.83 & 0.80 \\ \hline
+    F1 score for test set & 0.24 & 0.74 & 0.76\\ \hline
   \end{tabular}
 \end{center}
 
@@ -121,10 +121,10 @@ Cons:
   \begin{tabular}{| c | c | c | c | }
     \hline
     & 100 & 200 & 300 \\ \hline
-    Training time (sec) & & & \\ \hline
-    Prediction time (sec) & & & \\ \hline 
-    F1 score for training set & & & \\ \hline
-    F1 score for test set & & & \\ \hline
+    Training time (sec) & 0.001 & 0.004 & 0.008 \\ \hline
+    Prediction time (sec) & 0.001 & 0.002 & 0.002 \\ \hline 
+    F1 score for training set & 0.90 & 0.89 & 0.87 \\ \hline
+    F1 score for test set & 0.78 & 0.80 & 0.78 \\ \hline
   \end{tabular}
 \end{center}
 
