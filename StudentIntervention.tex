@@ -66,9 +66,22 @@ Cons:
 \end{itemize}
 
 Despite the memory cost, since our dataset is not too large, kNN is a reasonable classifier to try.
+
+\begin{center}
+  \begin{tabular}{| c | c | c | c | }
+    \hline
+    & 100 & 200 & 300 \\ \hline
+    Training time (sec) & & & \\ \hline
+    Prediction time (sec) & & & \\ \hline 
+    F1 score for training set & & & \\ \hline
+    F1 score for test set & & & \\ \hline
+  \end{tabular}
+\end{center}
+
 \subsection{Gaussian Naive Bayes Classifier}
-Naive Bayes is a learning algorithm based on applying Bayes' theorem with the assumption that every pair of features are independent (hence the ``naive"). Here, we use the Gaussian naive Bayes classifier, which assumes the likelihood of each feature is Gaussian.\\
+Naive Bayes is a learning algorithm based on applying Bayes' theorem with the assumption that every pair of features are independent (hence the use of ``naive"). Here, we use the Gaussian naive Bayes classifier, which assumes the likelihood of each feature is Gaussian.\\
 \\
+$\clubsuit$ FINISH WATCHING VIDEOS AND FILL IN...\\
 Pros:
 \begin{itemize}
 	\item 
@@ -79,6 +92,40 @@ Cons:
 	\item 
 \end{itemize}
 
+\begin{center}
+  \begin{tabular}{| c | c | c | c | }
+    \hline
+    & 100 & 200 & 300 \\ \hline
+    Training time (sec) & & & \\ \hline
+    Prediction time (sec) & & & \\ \hline 
+    F1 score for training set & & & \\ \hline
+    F1 score for test set & & & \\ \hline
+  \end{tabular}
+\end{center}
+
 \subsection{Support Vector Machine Classifier}
+Pros:
+\begin{itemize}
+	\item Effective in high dimensional spaces
+	\item Can still be effective in cases where the number of dimensions is greater than the number of samples
+	\item Uses only a subset of training points in the decision function (the ``support vectors"), so it is memory efficient
+	\item Versatile, since different kernel functions can be specified for the decision function
+\end{itemize}
+Cons:
+\begin{itemize}
+	\item If the number of features is much greater than the number of samples, it is likely to perform poorly
+	\item Does not directly provide probability estimates; these are calculated using a memory expensive five-fold cross-validation
+\end{itemize}
+
+\begin{center}
+  \begin{tabular}{| c | c | c | c | }
+    \hline
+    & 100 & 200 & 300 \\ \hline
+    Training time (sec) & & & \\ \hline
+    Prediction time (sec) & & & \\ \hline 
+    F1 score for training set & & & \\ \hline
+    F1 score for test set & & & \\ \hline
+  \end{tabular}
+\end{center}
 
 \end{document}
