@@ -1,0 +1,54 @@
+\documentclass[12 pt]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{fullpage}
+\usepackage[mathscr]{euscript}
+\usepackage{youngtab}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{enumerate}
+\usepackage{listings}
+\newcommand{\W}{\mathcal{W}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\pf}{\tilde{\phi}_N}
+\newcommand{\g}{\mathfrak{g}}
+\newcommand{\su}{\mathfrak{su}}
+\newcommand{\so}{\mathfrak{so}}
+\newcommand{\usp}{\mathfrak{usp}}
+\newcommand{\h}{\mathfrak{h}}
+\newcommand{\BB}{\mathfrak{B}}
+\newcommand{\mon}{\OO_{\vec{n}}(a)}
+\newcommand{\I}{\mathcal{I}}
+\numberwithin{equation}{section}
+\begin{document}
+
+\title{Student Intervention System \\ \footnotesize{Udacity Machine Learning Engineer \\ Nanodegree Program: Project 2}}
+\author{Anderson Daniel Trimm}
+\date{\today}
+\maketitle
+
+\section{Classification vs Regression}
+Our model predicts which students will pass or fail their high school final exam, and therefore need an intervention. Since we are predicting \emph{discrete} labels (in this case, binary), this is a \emph{classification} problem, as opposed to a \emph{regression} problem, in which we would be predicting \emph{continuous} labels.
+\section{Exploring the Data}
+In this section, we use the code in the accompanying ipython notebook to identify important characteristics of the dataset which will influence our prediction. Running the code, we find
+
+\begin{verbatim}	
+Total number of students: 395
+Number of students who passed: 265
+Number of students who failed: 130
+Number of features: 31
+Graduation rate of the class: 0.67%
+\end{verbatim}
+
+\section{Training and Evaluating the Models}
+
+\end{document}
