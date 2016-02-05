@@ -50,5 +50,35 @@ Graduation rate of the class: 0.67%
 \end{verbatim}
 
 \section{Training and Evaluating the Models}
+\subsection{KNN Classifier}
+The $k$-nearest neighbor classifier finds the $k$ training samples closest in distance to the query point, and predicts the label from these. \\
+\\
+Pros:
+\begin{itemize}
+	\item Fast training time - it simply remembers all the training points
+	\item Being non-parametric, it can be useful in classification problems where the decision boundary is very irregular
+\end{itemize}
+
+Cons:
+\begin{itemize}
+	\item Potentially long training time - it has to search through the dataset to find the $k$ nearest neighbors
+	\item Uses a lot of CPU memory, since it has to store the dataset (as opposed to a parametric model, which throws away the dataset after learning the parameters)
+\end{itemize}
+
+Despite the memory cost, since our dataset is not too large, kNN is a reasonable classifier to try.
+\subsection{Gaussian Naive Bayes Classifier}
+Naive Bayes is a learning algorithm based on applying Bayes' theorem with the assumption that every pair of features are independent (hence the ``naive"). Here, we use the Gaussian naive Bayes classifier, which assumes the likelihood of each feature is Gaussian.\\
+\\
+Pros:
+\begin{itemize}
+	\item 
+\end{itemize}
+
+Cons:
+\begin{itemize}
+	\item 
+\end{itemize}
+
+\subsection{Support Vector Machine Classifier}
 
 \end{document}
