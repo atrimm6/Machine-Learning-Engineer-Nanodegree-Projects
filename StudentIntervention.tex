@@ -51,7 +51,7 @@ Graduation rate of the class: 0.67%
 
 \section{Training and Evaluating the Models}
 \subsection{KNN Classifier}
-The $k$-nearest neighbor classifier finds the $k$ training samples closest in distance to the query point, and predicts the label from these. \\
+The $k$-nearest neighbor classifier finds the $k$ training samples closest in distance to the query point, and predicts the label by comparing to these. \\
 \\
 Pros:
 \begin{itemize}
@@ -65,7 +65,7 @@ Cons:
 	\item Uses a lot of CPU memory, since it has to store the dataset (as opposed to a parametric model, which throws away the dataset after learning the parameters)
 \end{itemize}
 
-Despite the memory cost, since our dataset is not too large, kNN is a reasonable classifier to try. The results for our model with the default parameter settings are recorded in the table below.
+In our case, we don't have a good hypothesis for a parametric model, so a non-parametric model might be best. Despite the memory cost, since our dataset is not too large, kNN is a reasonable classifier to try. The results for our model with the default parameter settings are recorded in the table below.
 
 \begin{center}
   \begin{tabular}{| c | c | c | c | }
@@ -79,18 +79,21 @@ Despite the memory cost, since our dataset is not too large, kNN is a reasonable
 \end{center}
 
 \subsection{Gaussian Naive Bayes Classifier}
-Naive Bayes is a learning algorithm based on applying Bayes' theorem with the assumption that every pair of features are independent (hence the use of ``naive"). Here, we use the Gaussian naive Bayes classifier, which assumes the likelihood of each feature is Gaussian.
+Naive Bayes is a learning algorithm based on applying Bayes' theorem with the assumption that every pair of features are independent (hence the use of the word ``naive"). Here, we use the Gaussian naive Bayes classifier, which assumes the likelihood of each feature is Gaussian.
 Pros:
 \begin{itemize}
 	\item Querying is fast
 	\item Few parameters (linear in number of variables)
+	\item Performs well on big feature spaces
 \end{itemize}
 
 Cons:
 \begin{itemize}
-	\item Learning is slow
+	\item Learning is slow - have to learn all the joint probabilities
 	\item Doesn't model interrelations between attributes
 \end{itemize}
+
+In contrast with KNN, naive Bayes is a parametric model, so while learning is slower, querying is faster. It therefore makes sense to compare the performance of this kind of model with that of an instance based model, such as  KNN. The results are recorded in the table below.
 
 \begin{center}
   \begin{tabular}{| c | c | c | c | }
@@ -117,6 +120,8 @@ Cons:
 	\item Does not directly provide probability estimates; these are calculated using a memory expensive five-fold cross-validation
 \end{itemize}
 
+Since SVM only uses a subset of the training points in its decision function, it should be more memory efficient than KNN. However, since it is a parametric model, it will take longer to train the model. It is therefore worth investigating this tradeoff by comparing its performance against that of KNN.
+
 \begin{center}
   \begin{tabular}{| c | c | c | c | }
     \hline
@@ -130,9 +135,9 @@ Cons:
 
 \section{Choosing the Best Model}
 \subsection{Optimal Model}
-Comparing the three tables, we see that both KNN and SVM outperformed Naive Bayes in terms of F1 score as the size of the training set decreased. In fact, their F1 score did not decrease by decreasing the size of the training set from 300 to 100. We can therefore restrict our training set to only 100 data points, which leads to savings on memory cost as well as training time. Between these two algorithms, support vector machines still uses less memory, as it only uses a subset of the training points in the decision function, whereas KNN uses them all. Since the training and prediction times, as well as the F1 score on the test set for these two algorithms are the same (training on 100 data points), we choose SVM as the optimal model.
+Comparing the three tables, we see that both KNN and SVM outperformed Naive Bayes in terms of F1 score as the size of the training set decreased. In fact, their F1 score did not decrease by decreasing the size of the training set from 300 to 100. We can therefore restrict our training set to only 100 data points, which leads to savings on memory cost as well as computation time. Between these two algorithms, support vector machines still uses less memory as it is parametric. Since the training and prediction times, as well as the F1 score on the test set for these two algorithms are the same (training on 100 data points), we choose SVM as the optimal model.
 \subsection{Description of Model in Layman's Terms}
-To determine which students will pass or fail using our data, we first plot the data. We will pretend there are only two features, so that we can plot these points in the xy-plane on a sheet of paper. The general idea will be the same. Our model will determine where to draw a line that separates the xy-plane into two regions: data points falling into one region will all be passing, and all those falling into the other will be failing. This line will be chosen as to minimize the number of misclassifications, while at the same time maximizing its ability to correctly classify new, unseen data points.
+To determine which students will pass or fail using our data, we first plot the data. We will pretend there are only two features, so that we can plot these points in the xy-plane on a sheet of paper. The general idea will be the same. Our model (SVM) will determine where to draw a line that separates the xy-plane into two regions: data points falling into one region will all be passing, and all those falling into the other will be failing. This line will be chosen as to minimize the number of misclassifications, while at the same time maximizing its ability to correctly classify new, unseen data points.
 
 \subsection{Model Tuning and Tuned F1 Score}
 We tune our SVM model using gridsearch over the parameter ``C", which is the penalty parameter of the error term. Running the code, we find the optimal C-value is 0.5. The optimized model gives has an F1 score of 0.82 on the test set, which is indeed an improvement of the F1 score of 0.78 of the default SVM model.
