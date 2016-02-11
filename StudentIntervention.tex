@@ -139,6 +139,10 @@ Comparing the three tables, we see that both KNN and SVM outperformed Naive Baye
 \subsection{Description of Model in Layman's Terms}
 To determine which students will pass or fail using our data, we first plot the data. We will pretend there are only two features, so that we can plot these points in the xy-plane on a sheet of paper. The general idea will be the same. Our model (SVM) will determine where to draw a line that separates the xy-plane into two regions: data points falling into one region will all be passing, and all those falling into the other will be failing. This line will be chosen as to minimize the number of misclassifications, while at the same time maximizing its ability to correctly classify new, unseen data points.
 
+While many models create this kind of linear boundary, the advantage of our model over others is that it chooses the line that maximizes the distance between the two classes of data points (passing or failing). It is this maximum distance that allows our model to generalize well to new data.
+
+In some situations, the data points might be mixed up in such a way that it may not be possible to find a line to separate the passing and failing students. If this is the case, it is no problem, as our model can still separate them with the following modification: we add a third axis (a ``depth", that would be coming out of the page) and plot the data points in this three-dimensional space. By making the ``depth" of the data point depend on their positions in the xy-plane, we can find a plane that separates the passing and failing students (in three-dimensions). This plane is again chosen so that there is a maximum distance between the passing and failing students, so that the model is able to generalize well to new data.
+
 \subsection{Model Tuning and Tuned F1 Score}
 We tune our SVM model using gridsearch over the parameter ``C", which is the penalty parameter of the error term. Running the code, we find the optimal C-value is 0.5. The optimized model gives has an F1 score of 0.82 on the test set, which is indeed an improvement of the F1 score of 0.78 of the default SVM model.
 \end{document}
